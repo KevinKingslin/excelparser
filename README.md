@@ -8,6 +8,13 @@ Tech Stack:
 * Frontend: JavaScript and JQuery
 * Database: SQLite3
 
+### **Sample Excel Format**
+|Product Name|Variation|Stock|Price|
+|------------|---------|-----|-----|
+|iPhone|Yellow-64 GB| 10|40000|
+
+
+
 ### **Files:**
 The following is the file structure of the project where I added or modified. 
 ```
