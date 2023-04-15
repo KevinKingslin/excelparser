@@ -4,13 +4,13 @@ ExcelParser is a web-application where users can upload a Excel sheet(.xlsx or .
 Users can view thier sheets on the website. Other features include sorting, and search of data and pagination of the table.
 
 Tech Stack:
-Backend: Django
-Frontend: JavaScript and JQuery
-Database: SQLite3
+* Backend: Django
+* Frontend: JavaScript and JQuery
+* Database: SQLite3
 
 ### **Files:**
 The following is the file structure of the project where I added or modified. 
-
+```
 ├── db.sqlite3 - SQLite3 database
 ├── excelparser - excelparser app
 │   ├── admin.py - admin settings for model view
@@ -35,3 +35,4 @@ The following is the file structure of the project where I added or modified.
 │   └── wsgi.py
 ├── README.md
 └── requirements.txt
+```
