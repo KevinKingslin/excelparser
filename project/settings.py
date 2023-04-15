@@ -10,6 +10,8 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
+import os
+
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -263,3 +265,10 @@ JAZZMIN_SETTINGS = {
     "changeform_format_overrides": {"auth.user": "collapsible", "auth.group": "vertical_tabs"},
     # Add a language dropdown into the admin
 }
+
+
+STATIC_ROOT = '/static/'
+STATIC_URL = '/static/'
+STATICFILES_DIRS = (
+                    os.path.join("/home/kevin/Documents/Code", 'static'),
+)
