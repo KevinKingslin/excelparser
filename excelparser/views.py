@@ -47,11 +47,12 @@ def addProducts(request):
             variation = row[1].value
             stock = row[2].value
             price = row[3].value
+            # print(product_name, variation, stock, price)
 
             try:
                 product = Product.objects.get(name=product_name)
             except:
-                Product.objects.create(name=product_name, lowest_price=price)
+                product = Product.objects.create(name=product_name, lowest_price=price)
 
             try:
                 Variations.objects.get(variation_text=variation)

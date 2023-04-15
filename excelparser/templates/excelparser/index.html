@@ -8,6 +8,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
+        <!-- <meta http-equiv="refresh" content="1"> -->
         <title>Excel Parser</title>
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
         <link href="{% static 'excelparser/styles.css' %}" rel="stylesheet" />
@@ -22,7 +23,7 @@
             <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
 
             <!-- Add Products Button -->
-            <button class="btn btn-primary" id="btnNavbarSearch" type="button" data-toggle="modal" data-target="#productModal">Add Products</button>
+            <button class="btn btn-primary" id="btnNavbarSearch" data-toggle="modal" data-target="#productModal">Add Products</button>
         </nav>
         <div id="layoutSidenav">
             <div id="layoutSidenav_nav">
@@ -58,15 +59,6 @@
                                             <th>Last Updated</th>
                                         </tr>
                                     </thead>
-                                    <!-- <tfoot>
-                                        <tr>
-                                            <th>SI No</th>
-                                            <th>Product Name</th>
-                                            <th>Lowest Price</th>
-                                            <th>Variations and Stock</th>
-                                            <th>Last Updated</th>
-                                        </tr>
-                                    </tfoot> -->
                                     <tbody>
                                       {% if productsCount != 0 %}
                                         {% for product in products %}
@@ -75,24 +67,26 @@
                                               <td>{{ product.name }}</td>
                                               <td>{{ product.lowest_price }}</td>
                                               <td>
-                                                <div class="card-body">
-                                                  <table>
-                                                    <thead>
-                                                      <tr>
-                                                          <th>SI No</th>
-                                                          <th>Product Name</th>
-                                                      </tr>
-                                                    </thead>
-                                                    {% for variation in variations %}
-                                                    {% if variation.product_ID|slugify == product.name|slugify %}
-                                                      <tr>
-                                                          <td style="margin: auto;">{{ variation.variation_text }}</td>
-                                                          <td>{{ variation.stock }}</td>
-                                                      </tr>
-                                                    {% endif %}
-                                                  {% endfor %}
-                                                  </table>
+                                                <div class="row">
+                                                  <div class="col">
+                                                    <span style="font-weight: bold;">Variation</span>
+                                                  </div>
+                                                  <div class="col font-weight-bold">
+                                                    <span style="font-weight: bold;">Stock</span>
+                                                  </div>
                                                 </div>
+                                                {% for variation in variations %}
+                                                    {% if variation.product_ID|slugify == product.name|slugify %}
+                                                <div class="row">
+                                                  <div class="col">
+                                                    {{ variation.variation_text }}
+                                                  </div>
+                                                  <div class="col">
+                                                    {{ variation.stock }}
+                                                  </div>
+                                                </div>
+                                                {% endif %}
+                                                  {% endfor %}
                                               </td>
                                               <td>{{ product.last_updated }}</td>
                                           </tr>

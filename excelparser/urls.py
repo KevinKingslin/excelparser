@@ -6,5 +6,6 @@ urlpatterns = [
     # View routes
     path("", views.index, name="index"),
 
+    # API route
     path("addProducts", views.addProducts, name="addProducts")
 ]
