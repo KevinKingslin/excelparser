@@ -1,5 +1,6 @@
 from django.db import models
 
+# Product model
 class Product(models.Model):
     ID = models.AutoField(primary_key=True)
     name = models.CharField(max_length=100)
@@ -9,6 +10,7 @@ class Product(models.Model):
     def __str__(self):
         return f"{self.name}"
 
+# Variations model
 class Variations(models.Model):
     ID = models.AutoField(primary_key=True)
     product_ID = models.ForeignKey(Product, on_delete=models.CASCADE)

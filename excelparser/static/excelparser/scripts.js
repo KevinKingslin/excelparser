@@ -1,3 +1,4 @@
+// DataTable
 window.addEventListener("DOMContentLoaded", (event) => {
     // Toggle the side navigation
     const sidebarToggle = document.body.querySelector("#sidebarToggle");
@@ -18,6 +19,7 @@ window.addEventListener("DOMContentLoaded", (event) => {
     }
 });
 
+// Function to add new products
 function addProducts() {
     event.preventDefault();
     input = document.getElementById("excel_file");
@@ -25,6 +27,7 @@ function addProducts() {
 
     file = input.files[0];
 
+    // Check file type
     filetype = file.name.split(".").pop();
     console.log(filetype);
     if (filetype !== "xlsx") {
@@ -34,12 +37,14 @@ function addProducts() {
         }
     }
 
+    // Check file size
     filesize = Math.round(file.size / 1000000);
     if (filesize > 2) {
         alert("File size greater than 2Mb");
         return;
     }
 
+    // Send request
     formData.append("excel_file", input.files[0]);
 
     fetch("/addProducts", {

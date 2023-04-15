@@ -10,7 +10,7 @@ import openpyxl
 
 from .models import Product, Variations
 
-
+# View for mainpage
 def index(request):
     if request.method == "GET":
         products = Product.objects.all()
@@ -30,7 +30,7 @@ def index(request):
     else:
         return HttpResponse('404')
     
-
+# API view to add new products
 @csrf_exempt
 def addProducts(request):
     if request.method == "POST":
