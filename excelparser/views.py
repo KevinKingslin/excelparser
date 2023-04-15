@@ -5,13 +5,10 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
-from django.core.exceptions import ObjectDoesNotExist
 from django.core.paginator import Paginator
 import openpyxl
 
 from .models import Product, Variations
-
-# Create your views here.
 
 
 def index(request):
@@ -49,16 +46,20 @@ def addProducts(request):
             product_name = row[0].value
             variation = row[1].value
             stock = row[2].value
+            price = row[3].value
 
             try:
                 product = Product.objects.get(name=product_name)
             except:
-                Product.objects.create(name=product_name, lowest_price=20000)
+                Product.objects.create(name=product_name, lowest_price=price)
 
             try:
                 Variations.objects.get(variation_text=variation)
             except:
                 Variations.objects.create(product_ID=product, variation_text=variation, stock=stock)
+                if product.lowest_price > price:
+                    product.lowest_price = price
+                    product.save()
 
         return HttpResponse('200')
     
