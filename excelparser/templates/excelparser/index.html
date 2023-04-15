@@ -1,0 +1,78 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Excel Parser</title>
+
+        <!-- Bootstrap -->
+        <link
+            rel="stylesheet"
+            href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+            integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+            crossorigin="anonymous"
+        />
+
+        <!-- CSS Stylesheet -->
+        <link href="{% static 'excelparser/styles.css' %}" rel="stylesheet" />
+    </head>
+    <body>
+        <nav class="navbar navbar-light bg-light">
+            <span class="navbar-brand mb-0 h1">Excel Parser</span>
+        </nav>
+
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <table class="table table-bordered">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th scope="col">SI No</th>
+                                <th scope="col">Product Name</th>
+                                <th scope="col">Lowest Price</th>
+                                <th scope="col">Variations and Stock</th>
+                                <th scope="col">Last Updated</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                          {% if productsCount != 0 %}
+                            {% for product in products %}
+                              <tr>
+                                  <td>{{ product.ID }}</td>
+                                  <td>{{ product.name }}</td>
+                                  <td>{{ product.lowest_price }}</td>
+                                  <td>
+                                      <table class="table table-bordered">
+                                          <thead class="thead-dark">
+                                              <tr>
+                                                  <th scope="col">Variation</th>
+                                                  <th scope="col">Stock</th>
+                                              </tr>
+                                          </thead>
+                                          {% if variationsCount != 0 %}
+                                            {% for variation in variations %}
+                                            <tr>
+                                                <td>{{ variation.variation_text }}</td>
+                                                <td>{{ variation.stock }}</td>
+                                            </tr>
+                                            {% endfor %}
+                                          {% else %}
+                                            <tr><td>No data available</td></tr>
+                                          {% endif %}
+                                      </table>
+                                  </td>
+                                  <td>{{ product.last_updated }}</td>
+                              </tr>
+                            {% endfor %}
+                          {% else %}
+                            <tr>No data available</tr>
+                          {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
