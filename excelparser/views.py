@@ -93,10 +93,11 @@ def addProducts(request):
 # API view to get product details
 def getProducts(request):
     if request.method == "GET":
-        products = list(Product.objects.all().values('ID', 'name', 'lowest_price', 'last_updated'))
+        products = list(Product.objects.all().values('name', 'lowest_price', 'last_updated'))
 
         # Format each product in usable form
-        for product in products:
+        for i, product in enumerate(products):
+            product["ID"] = i + 1
             product_name = product["name"]
             prod = Product.objects.get(name=product_name)
             product["last_updated"] = product["last_updated"].strftime(("%-d %b %Y %-H:%M %p %Z"))            

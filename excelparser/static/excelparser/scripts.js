@@ -32,7 +32,7 @@ $(document).ready(function product() {
                 { "data": "lowest_price"},
                 { "data": {variations: "variations", variantCount: "variantCount"}, "render": function(data, type, row, meta){
                     // Create nested table
-                    table_string = "<table><thead><th>Variation</th><th>Stock</th></thead><tbody>"
+                    table_string = "<table class='table'><thead><th>Variation</th><th>Stock</th></thead><tbody>"
                         $.each(data.variations, function(i){
                             table_string += "<tr><td>" + data.variations[i]['variant'] + "</td><td>" + data.variations[i]['stock'] + '</td></tr>'
                         })
@@ -58,6 +58,12 @@ async function addProducts() {
     input = document.getElementById("excel_file");
     const formData = new FormData();
 
+    // Check for empty file
+    if(input.value == ""){
+        alert("No file uploaded")
+        return
+    }
+
     file = input.files[0];
 
     // Send request
@@ -73,6 +79,7 @@ async function addProducts() {
     // Checkfor error response
     if(response["error"]){
         alert(response["error"])
+        return
     }
 
     // Clear existing DataTable
@@ -104,4 +111,5 @@ async function addProducts() {
      }); 
 
     input.value = "" // Clear file data
+    $('#productModal').modal('hide')
 }
