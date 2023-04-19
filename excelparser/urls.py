@@ -7,5 +7,6 @@ urlpatterns = [
     path("", views.index, name="index"),
 
     # API route
-    path("addProducts", views.addProducts, name="addProducts")
+    path("addProducts", views.addProducts, name="addProducts"),
+    path("getProducts", views.getProducts, name="getProducts"),
 ]
