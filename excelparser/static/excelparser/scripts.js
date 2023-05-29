@@ -61,13 +61,14 @@ async function addProducts() {
     // Check for empty file
     if(input.value == ""){
         alert("No file uploaded")
-        return
     }
 
     file = input.files[0];
 
     // Send request
     formData.append("excel_file", input.files[0]);
+
+    input.value = "" // Clear file data
 
     // Send Excel file to backend and wait for response
     response = await fetch("/addProducts", {
@@ -79,7 +80,6 @@ async function addProducts() {
     // Checkfor error response
     if(response["error"]){
         alert(response["error"])
-        return
     }
 
     // Clear existing DataTable
@@ -99,7 +99,7 @@ async function addProducts() {
                  { "data": "name"},
                  { "data": "lowest_price"},
                  { "data": {variations: "variations", variantCount: "variantCount"}, "render": function(data, type, row, meta){
-                     table_string = "<table><thead><th>Variation</th><th>Stock</th></thead><tbody>"
+                     table_string = "<table class='table'><thead><th>Variation</th><th>Stock</th></thead><tbody>"
                          $.each(data.variations, function(i){
                              table_string += "<tr><td>" + data.variations[i]['variant'] + "</td><td>" + data.variations[i]['stock'] + '</td></tr>'
                          })
@@ -110,6 +110,5 @@ async function addProducts() {
              ],
      }); 
 
-    input.value = "" // Clear file data
-    $('#productModal').modal('hide')
+    // $('#productModal').modal('hide')
 }

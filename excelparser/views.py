@@ -1,8 +1,10 @@
 import os
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse, JsonResponse
+from math import floor
 from django.shortcuts import render
 import openpyxl
+import xlrd
 
 from .models import Product, Variations
 
@@ -32,7 +34,7 @@ def addProducts(request):
         filext = split_tup[1]
 
         # Check file type
-        if filext == '.xlsx' or filext == 'xls':
+        if filext == '.xlsx' or filext == '.xls':
             pass
         else:
             return JsonResponse({"error": "Invalid file type"}, status=404)
@@ -42,12 +44,18 @@ def addProducts(request):
         if(file_size > 2):
             return JsonResponse({"error": "File size greater than 2MB"}, status=404)
 
-        wb = openpyxl.load_workbook(excel_file)
-        worksheet = wb["Sheet1"]
+        if filext == '.xlsx':
+            wb = openpyxl.load_workbook(excel_file)
+            worksheet = wb["Sheet1"]
+        elif filext == '.xls':
+            wb = xlrd.open_workbook(file_contents=excel_file.read())
+            worksheet = wb.sheet_by_index(0)
 
         # Add each product
-        for i, row in enumerate(worksheet.iter_rows()):
-            if i == 0:
+        rowCount=0
+        for row in worksheet:
+            if rowCount == 0:
+                rowCount+=1
                 continue
 
             product_name = row[0].value
@@ -55,9 +63,17 @@ def addProducts(request):
             stock = row[2].value
             price = row[3].value
 
-            # Check for invalid data
+            # Skip empty rows
+            if product_name == None and variation == None and stock == None and price == None:
+                continue
+
+            # Check for blank data
             if product_name == None or variation == None or stock == None or price == None:
                 return JsonResponse({"error": "Excel file contains invalid/blank data"}, status=404)
+            
+			# Type validation
+            if not (isinstance(stock, int) or isinstance(stock, float)) or not (isinstance(price, float) or isinstance(price, int)):
+                continue
 
             # Create new product
             try:
@@ -65,26 +81,30 @@ def addProducts(request):
             except:
                 product = Product.objects.create(name=product_name, lowest_price=price)
 
+            # Update lowest price
+            if price >= 0:
+                if product.lowest_price > price:
+                    product.lowest_price = price
+                    product.save()
+
             # Create new variant
             try:
                 variant = Variations.objects.get(product_ID=product, variation_text=variation)
             except:
                 variant = Variations.objects.create(product_ID=product, variation_text=variation, stock=stock)
-
-            # Update lowest price
-            if product.lowest_price > price:
-                product.lowest_price = price
-                product.save()
+                rowCount += 1
+                continue
 
             # Update stock
             if stock < 0 or None:
-                variant.stock = 0
-                product.save()
+                variant.stock = variant.stock
             else:
-                variant.stock = stock
-                product.save()
+                variant.stock += stock
 
+            product.save()
             variant.save()
+
+            rowCount += 1
 
         return HttpResponse('200')
     else:
@@ -100,7 +120,7 @@ def getProducts(request):
             product["ID"] = i + 1
             product_name = product["name"]
             prod = Product.objects.get(name=product_name)
-            product["last_updated"] = product["last_updated"].strftime(("%-d %b %Y %-H:%M %p %Z"))            
+            product["last_updated"] = product["last_updated"].strftime(("%-d %b %Y %-I:%M %p %Z"))            
             
             variants = prod.variations_set.all()
             product["variantCount"] = len(variants)
